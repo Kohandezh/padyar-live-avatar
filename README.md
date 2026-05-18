@@ -2,9 +2,18 @@
 
 **Realtime orchestration layer for the PadYar AI Avatar ecosystem.**
 
-This repository handles WebSocket streaming, async scheduling, session lifecycle, latency tracking, fallback recovery, and engine adapter orchestration.
+## Monorepo Structure
 
-## What this repo does
+| Path | Role |
+|---|---|
+| `src/padyar_live/` | Realtime runtime — WebSocket streaming, scheduling, sessions, latency, EngineAdapter |
+| `tests/` | Runtime test suite (54 tests, governance-enforced) |
+| `mobile/padyar-android/` | Android SDK — offline 2D avatar, NCNN lip-sync |
+| `mobile/padyar-ios/` | iOS SDK — offline 2D avatar, local rendering |
+| `PadYar-LipSync-master/` | Historical engine reference (snapshot, not imported by runtime) |
+| `res/` | Product/avatar assets |
+
+## What the Runtime Does
 
 - WebSocket streaming (`/ws/live`) — bidirectional binary frames with ping/pong keepalive
 - Async frame queue and chunk scheduling with backpressure
@@ -13,7 +22,7 @@ This repository handles WebSocket streaming, async scheduling, session lifecycle
 - Failover and fallback on engine failure
 - REST API for session management and metrics (`/health`, `/session`, `/metrics`)
 
-## What this repo does NOT do
+## What the Runtime Does NOT Do
 
 This repository does **not** contain ML models, UNet, VAE, Whisper, TTS engines, or model weights.
 
@@ -24,32 +33,29 @@ Inference is accessed **only** through the `EngineAdapter` interface. All AI pro
 ```
 ┌──────────────────┐
 │   Client App     │
+│ (Mobile / Web)   │
 └────────┬─────────┘
          │ WebSocket / REST
          ▼
 ┌──────────────────┐
-│ padyar-live-     │  ← This repo
+│ padyar-live-     │  ← This repo (runtime)
 │ avatar           │
-│                  │
 │  FastAPI + WS    │
 │  Scheduler       │
 │  EngineAdapter   │  ← External calls only
 └────────┬─────────┘
-         │ HTTP
+         │ HTTP/gRPC
          ▼
 ┌──────────────────┐
-│ PadYar-LipSync   │  ← Stable inference engine
-│ (separate repo)  │
-│  UNet, VAE,      │
-│  Whisper, TTS    │
+│ PadYar-LipSync   │  ← Inference engine (separate repo)
 └──────────────────┘
 ```
 
-| Repo | Role | Status |
-|------|------|--------|
-| **PadYar-LipSync** | Stable inference engine (UNet, VAE, Whisper, TTS, face processing) | Production-stable |
-| **padyar-live-avatar** | Realtime orchestration (streaming, scheduling, sessions, latency) | Active development |
-| **PadYarAvatar** | Future cognition layer (memory, personality, emotion, agents) | Not started |
+| Layer | Role | Status |
+|---|---|---|
+| **PadYar-LipSync** | Inference engine (UNet, VAE, Whisper, TTS) | Production-stable |
+| **padyar-live-avatar** | Runtime orchestration (streaming, scheduling, sessions) | Active development |
+| **PadYarAvatar** | Cognition layer (memory, personality, emotion) | Not started |
 
 ## Development
 
@@ -75,36 +81,32 @@ python -m padyar_live
 ruff check src/ tests/              # Lint
 mypy src/padyar_live --ignore-missing-imports  # Type check
 pytest tests/ -v                    # Tests (54 total)
-pytest tests/test_governance_*.py   # Architecture governance only
+pytest tests/test_governance_*.py   # Architecture governance
 ```
 
 ### CI
 
-GitHub Actions runs on every push/PR:
-- **lint** — ruff
-- **typecheck** — mypy
-- **test** — pytest (54 tests)
-- **architecture** — governance checks (forbidden imports, deps, layering)
+GitHub Actions runs on every push/PR: lint, typecheck, test, architecture governance.
 
 ### Current validation
 
 ```
 ruff:   All checks passed
 mypy:   Success: no issues found in 18 source files
-pytest: 54 passed in 2.77s
+pytest: 54 passed
 ```
 
-## Architecture governance
+## Architecture Governance
 
 Automated enforcement prevents boundary violations:
 
 | Test | What it enforces |
-|------|-----------------|
-| `test_governance_imports` | No ML framework imports (`torch`, `transformers`, etc.) |
+|---|---|
+| `test_governance_imports` | No ML framework imports |
 | `test_governance_deps` | No ML packages installed |
 | `test_governance_architecture` | Adapter contract, layering, no circular deps |
 
-See `docs/BOUNDARIES.md` for the full forbidden dependency list and good/bad import examples.
+See `docs/BOUNDARIES.md` for the full forbidden dependency list.
 
 ## Documentation
 
@@ -117,15 +119,9 @@ See `docs/BOUNDARIES.md` for the full forbidden dependency list and good/bad imp
 
 ## Dependencies
 
-Runtime (minimal):
-- FastAPI
-- Uvicorn
-- Pydantic
+Runtime (minimal): FastAPI, Uvicorn, Pydantic
 
-Dev:
-- pytest, pytest-asyncio, httpx
-- ruff, black, mypy
-- pre-commit
+Dev: pytest, pytest-asyncio, httpx, ruff, black, mypy, pre-commit
 
 **Forbidden:** torch, transformers, diffusers, onnxruntime, whisper, mediapipe, ultralytics, celery, redis, kafka
 
@@ -135,5 +131,5 @@ See [LICENSE](LICENSE).
 
 ---
 
-Powered by: Mohammad Kohandezh — KSF Company
+Powered by Mohammad Kohandezh — KSF Company
 Contact: info@ksf.ir

@@ -8,3 +8,9 @@ build/
 *.egg
 .pytest_cache/
 .env
+.mypy_cache/
+.ruff_cache/
+
+# Mobile migration artifacts
+.idea.mobile/
+legacy_root_conflicts/
