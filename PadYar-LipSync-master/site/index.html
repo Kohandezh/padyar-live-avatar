@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seamless Video Playback</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+        }
+        .video-container {
+            position: relative;
+            width: 640px;
+            height: 100%;
+        }
+        video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container" id="container">
+    <video id="video1" muted playsinline></video>
+    <video id="video2" muted playsinline></video>
+</div>
+
+<script>
+    const videos = [
+            "audio_00.mp4"
+        ];
+    let currentIndex = 0;
+    let activeVideo = 1;
+    const video1 = document.getElementById("video1");
+    const video2 = document.getElementById("video2");
+
+    async function append(){
+        for (let item=0; item<10; item++){
+            videos.push("audio_0.mp4")
+        
+            if (item == 1){show_video()}
+            await sleep(2000);
+        }
+    }
+
+    async function show_video(){
+        
+        function playNextVideo() {
+            const currentVideo = activeVideo === 1 ? video1 : video2;
+            const nextVideo = activeVideo === 1 ? video2 : video1;
+
+            if (currentIndex >= videos.length) return;
+
+            nextVideo.src = videos[currentIndex++];
+            nextVideo.load();
+
+            nextVideo.oncanplay = () => {
+                nextVideo.play().then(() => {
+                    nextVideo.style.opacity = "1";
+                    setTimeout(() => {
+                        currentVideo.style.opacity = "0";
+                        currentVideo.pause();
+                    }, 500);
+                }).catch(error => console.error("Autoplay failed:", error));
+            };
+
+            activeVideo = activeVideo === 1 ? 2 : 1;
+        }
+
+            // Start first video
+            video1.src = videos[currentIndex++];
+            video1.play().catch(error => console.error("Autoplay failed:", error));
+            video1.style.opacity = "1";
+
+            video1.addEventListener("ended", playNextVideo);
+            video2.addEventListener("ended", playNextVideo);
+            document.getElementById('container').addEventListener("click", () => {
+                video1.muted = false;
+                video2.muted = false;
+            }, { once: true });
+
+        }
+     // Only trigger once
+     append()
+     console.log("hiiiiiiiiiii")
+     function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+</script>
+
+</body>
+</html>

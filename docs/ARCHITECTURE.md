@@ -4,7 +4,25 @@
 
 `padyar-live-avatar` is the **realtime orchestration layer** in the PadYar ecosystem. It handles streaming, scheduling, and transport. It does NOT handle AI inference.
 
-## Repo interaction
+This repo is also a **monorepo** hosting mobile SDKs, a historical engine reference, and product assets alongside the governed runtime.
+
+## Monorepo layout
+
+```
+padyar-live-avatar/
+├── src/padyar_live/              GOVERNED — realtime runtime
+├── tests/                        GOVERNED — runtime test suite
+├── mobile/padyar-android/        Android SDK (not governed, not imported by runtime)
+├── mobile/padyar-ios/            iOS SDK (not governed, not imported by runtime)
+├── PadYar-LipSync-master/        Historical engine reference (not governed, not imported)
+├── res/                          Product/avatar assets
+└── docs/                         Architecture and governance docs
+```
+
+Governance scope: `src/padyar_live/` and `tests/` only.
+Mobile SDKs, legacy engine reference, and product assets are NOT runtime code.
+
+## Layer interaction
 
 ```
 ┌──────────────────┐
@@ -14,7 +32,7 @@
         │ WebSocket / REST
         ▼
 ┌──────────────────┐
-│ padyar-live-     │  THIS REPO
+│ padyar-live-     │  THIS REPO (runtime)
 │ avatar           │
 │                  │
 │  ┌────────────┐  │
@@ -35,7 +53,7 @@
          │ HTTP/gRPC (external call)
          ▼
 ┌──────────────────┐
-│ PadYar-LipSync   │  EXTERNAL — do not modify from here
+│ PadYar-LipSync   │  EXTERNAL — separate repo, do not modify from here
 │                  │
 │  UNet, VAE,      │
 │  Whisper, TTS,   │
@@ -43,7 +61,7 @@
 └──────────────────┘
 
 ┌──────────────────┐
-│ PadYarAvatar     │  FUTURE REPO — do not build yet
+│ PadYarAvatar     │  FUTURE — not built yet
 │ (not built)      │
 │ Memory, emotion, │
 │ personality,     │
@@ -51,7 +69,7 @@
 └──────────────────┘
 ```
 
-## Module layout
+## Runtime module layout
 
 ```
 src/padyar_live/

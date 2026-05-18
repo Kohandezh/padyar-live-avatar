@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Padyar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <video id="video1" src="videos/audio_1.mp4" playsinline></video>
+  <video id="video2" playsinline></video>
+
+  <div class="menu">
+    <button class="detroit-button" onclick="changeVideo('audio_1')">پادیار
+        <span class="corner top-left offset"></span>
+        <span class="corner top-right offset"></span>
+        <span class="corner bottom-left offset"></span>
+        <span class="corner bottom-right offset"></span>
+        <span class="side-dot top-dot"></span>
+        <span class="side-dot right-dot"></span>
+        <span class="side-dot bottom-dot"></span>
+        <span class="side-dot left-dot"></span>
+    </button>
+    <button class="detroit-button" onclick="changeVideo('audio_2')">کمک به شما
+        <span class="corner top-left offset"></span>
+        <span class="corner top-right offset"></span>
+        <span class="corner bottom-left offset"></span>
+        <span class="corner bottom-right offset"></span>
+        <span class="side-dot top-dot"></span>
+        <span class="side-dot right-dot"></span>
+        <span class="side-dot bottom-dot"></span>
+        <span class="side-dot left-dot"></span>
+    </button>
+    <button class="detroit-button" onclick="changeVideo('audio_3')">کهن سیستم فردا
+        <span class="corner top-left offset"></span>
+        <span class="corner top-right offset"></span>
+        <span class="corner bottom-left offset"></span>
+        <span class="corner bottom-right offset"></span>
+        <span class="side-dot top-dot"></span>
+        <span class="side-dot right-dot"></span>
+        <span class="side-dot bottom-dot"></span>
+        <span class="side-dot left-dot"></span>
+    </button>
+    <button class="detroit-button" onclick="changeVideo('audio_4')">کاربردها
+        <span class="corner top-left offset"></span>
+        <span class="corner top-right offset"></span>
+        <span class="corner bottom-left offset"></span>
+        <span class="corner bottom-right offset"></span>
+        <span class="side-dot top-dot"></span>
+        <span class="side-dot right-dot"></span>
+        <span class="side-dot bottom-dot"></span>
+        <span class="side-dot left-dot"></span>
+    </button>
+  </div>
+  <div class="menu1" id="menu1">
+    <button type="submit" onclick="sendRequest()">ارسال</button>
+    <input type="text" id="inputText" placeholder="چت بات سازمانی" />
+  </div>
+  <div class="menu2">
+    <a class="company_address" href="https://ksf.ir/">Powered By KSF Company</a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

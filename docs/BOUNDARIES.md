@@ -19,6 +19,18 @@
 - Avatar personality, memory, or cognition
 - Audio feature extraction
 
+## Governance scope
+
+Governance tests enforce rules on `src/padyar_live/` and `tests/` only.
+
+The following directories are NOT governed and are NOT runtime code:
+- `mobile/padyar-android/` — Android SDK
+- `mobile/padyar-ios/` — iOS SDK
+- `PadYar-LipSync-master/` — historical engine reference
+- `res/` — product/avatar assets
+
+Runtime must not import from any of these directories.
+
 ## Why ML code is forbidden here
 
 1. **Single responsibility.** PadYar-LipSync is the canonical inference engine. It is production-stable. Duplicating inference logic here creates divergence, double maintenance, and version drift.

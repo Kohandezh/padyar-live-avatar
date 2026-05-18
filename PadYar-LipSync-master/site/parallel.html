@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seamless Video Playback</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+        }
+        .video-container {
+            position: relative;
+            width: 640px;
+            height: 100%;
+        }
+        video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container" id="container">
+    <video id="video1" muted playsinline></video>
+    <video id="video2" muted playsinline></video>
+</div>
+
+<script>
+    let array = [];
+let appendIndex = 0;
+
+async function appendToArray() {
+  for (let i = 0; i < 5; i++) {
+    array.push(`Item ${appendIndex++}`);
+    console.log(`Appended: Item ${appendIndex - 1}`);
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
+  }
+}
+
+async function readFromArray() {
+  while (appendIndex < 5) {
+    if (array.length > 0) {
+      const item = array.shift();
+      console.log(`Read: ${item}`);
+    } else {
+      console.log("Queue is empty, waiting...");
+    }
+    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate delay
+  }
+}
+
+async function run() {
+  await Promise.all([appendToArray(), readFromArray()]);
+  console.log("Both functions completed.");
+}
+
+run();
+
+
+</script>
+
+</body>
+</html>
