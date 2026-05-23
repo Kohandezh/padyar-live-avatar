@@ -164,6 +164,8 @@ Architecture docs:
 - Monorepo integration is complete and merged into main.
 - Runtime remains ML-free, adapter-only, and governed under src/padyar_live/.
 - RemoteEngineAdapter MVP implemented and merged (PR #2). Stdlib-only HTTP client, no new dependencies.
+- Runtime adapter selection implemented and merged (PR #3). Env vars: `PADYAR_ENGINE_ADAPTER`, `PADYAR_ENGINE_URL`, `PADYAR_ENGINE_API_KEY`.
+- `RuntimeConfig.from_env()` loads config from environment. `create_engine_adapter(config)` selects adapter.
 - EngineAdapter contract unchanged: `generate_frames()` + `health_check()`.
 - Two adapters available: `FakeEngineAdapter` (testing) and `RemoteEngineAdapter` (production).
 - Mobile SDK audit is complete. Direct Duix references were not found.
