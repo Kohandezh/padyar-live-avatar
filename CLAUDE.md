@@ -163,8 +163,10 @@ Architecture docs:
 
 - Monorepo integration is complete and merged into main.
 - Runtime remains ML-free, adapter-only, and governed under src/padyar_live/.
-- Mobile SDK audit is complete.
-- Direct Duix references were not found.
+- RemoteEngineAdapter MVP implemented and merged (PR #2). Stdlib-only HTTP client, no new dependencies.
+- EngineAdapter contract unchanged: `generate_frames()` + `health_check()`.
+- Two adapters available: `FakeEngineAdapter` (testing) and `RemoteEngineAdapter` (production).
+- Mobile SDK audit is complete. Direct Duix references were not found.
 - Mobile build remains paused and must not resume without explicit approval.
 - Technical legacy identifiers inside mobile SDKs must not be renamed blindly.
 - Any mobile rebrand work requires a separate approved plan.
