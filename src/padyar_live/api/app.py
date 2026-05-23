@@ -7,7 +7,8 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query, Request, WebSocket
 from fastapi.responses import JSONResponse
 
-from padyar_live.adapters.engine import EngineAdapter, FakeEngineAdapter
+from padyar_live.adapters.engine import EngineAdapter
+from padyar_live.adapters.factory import create_engine_adapter
 from padyar_live.api.metrics import MetricsCollector
 from padyar_live.api.routes import router as rest_router
 from padyar_live.api.ws import WSHandler
@@ -43,10 +44,10 @@ def create_app(
 ) -> FastAPI:
     global _session_manager, _ws_handler, _metrics_collector
 
-    config = config or RuntimeConfig()
+    config = config or RuntimeConfig.from_env()
     _session_manager = SessionManager()
 
-    engine = engine or FakeEngineAdapter()
+    engine = engine or create_engine_adapter(config)
     factory = SchedulerFactory(
         engine=engine,
         chunk_size=config.chunk_size,
