@@ -168,6 +168,7 @@ Architecture docs:
 - `RuntimeConfig.from_env()` loads config from environment. `create_engine_adapter(config)` selects adapter.
 - EngineAdapter contract unchanged: `generate_frames()` + `health_check()`.
 - Two adapters available: `FakeEngineAdapter` (testing) and `RemoteEngineAdapter` (production).
+- Mock engine service added (PR #4). FastAPI app at `src/padyar_live/devtools/mock_engine.py`, CLI at `scripts/run_mock_engine.py`. 88/88 tests passing.
 - Mobile SDK audit is complete. Direct Duix references were not found.
 - Mobile build remains paused and must not resume without explicit approval.
 - Technical legacy identifiers inside mobile SDKs must not be renamed blindly.
