@@ -115,7 +115,7 @@ Allowed dev dependencies: pytest, pytest-asyncio, httpx, ruff, black, mypy, pre-
 
 ## Governance and Tests
 
-Automated enforcement via test suite (54 tests):
+Automated enforcement via test suite (121 tests):
 
 | Test file | What it enforces |
 |---|---|
@@ -129,6 +129,10 @@ Automated enforcement via test suite (54 tests):
 | `test_scheduler` | Frame scheduling, backpressure, fallback |
 | `test_session` | Session CRUD, TTL, idle, cleanup |
 | `test_ws_integration` | Full WebSocket lifecycle |
+| `test_adapter_factory` | Factory selection, config from env, API key masking |
+| `test_remote_engine_adapter` | RemoteEngineAdapter request/response/error handling |
+| `test_mock_engine_service` | Mock engine protocol, frames, latency, determinism |
+| `test_runtime_e2e_contract` | Full E2E: env→factory→adapter→mock engine→scheduler |
 
 Architecture docs:
 - `docs/ARCHITECTURE.md` — Module layout, data flow, replaceable engine strategy
@@ -137,8 +141,8 @@ Architecture docs:
 
 ## Current Known State
 
-- Branch: `integrate-padyar-mobile`
-- Runtime: ruff clean, mypy clean, 54/54 tests pass
+- Branch: `main`
+- Runtime: ruff clean, mypy clean, 121/121 tests pass
 - Ecosystem repos:
   - **PadYar-LipSync** — production-stable inference engine (separate repo)
   - **padyar-live-avatar** — realtime orchestration (this repo, active development)
@@ -168,7 +172,8 @@ Architecture docs:
 - `RuntimeConfig.from_env()` loads config from environment. `create_engine_adapter(config)` selects adapter.
 - EngineAdapter contract unchanged: `generate_frames()` + `health_check()`.
 - Two adapters available: `FakeEngineAdapter` (testing) and `RemoteEngineAdapter` (production).
-- Mock engine service added (PR #4). FastAPI app at `src/padyar_live/devtools/mock_engine.py`, CLI at `scripts/run_mock_engine.py`. 88/88 tests passing.
+- Mock engine service added (PR #4). FastAPI app at `src/padyar_live/devtools/mock_engine.py`, CLI at `scripts/run_mock_engine.py`.
+- Runtime E2E contract harness added (PR #5). 33 tests covering full path: `RuntimeConfig.from_env()` → `create_engine_adapter()` → `RemoteEngineAdapter` → Mock Engine Service → `FrameScheduler`. No production code changed. 121/121 tests passing.
 - Mobile SDK audit is complete. Direct Duix references were not found.
 - Mobile build remains paused and must not resume without explicit approval.
 - Technical legacy identifiers inside mobile SDKs must not be renamed blindly.
